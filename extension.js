@@ -132,7 +132,7 @@ const EdgeFlipping = new Lang.Class({
             let size = this._settings.get_int("size");
             this._edges["top1"].height = size;
             this._edges["bottom2"].height = size;
-            this._edges["top1"].height = size;
+            this._edges["top2"].height = size;
             this._edges["bottom2"].height = size;
 
             this._edges["right"].width = size;
