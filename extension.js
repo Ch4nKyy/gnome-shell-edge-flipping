@@ -24,6 +24,7 @@ const Main = imports.ui.main
 const Mainloop = imports.mainloop;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Meta = imports.gi.Meta
+const Gdk = imports.gi.Gdk
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -41,6 +42,11 @@ const EdgeFlipping = new Lang.Class({
         // Calculate some variables
         this._monitor1 = Main.layoutManager.primaryMonitor;
         this._monitor2 = Main.layoutManager.monitors[1];
+
+        let display = Gdk.Display.get_default();
+        let deviceManager = display.get_device_manager();
+        this._pointer = deviceManager.get_client_pointer();
+
         let offsetx1 = this._monitor1.width * this._settings.get_int("offset") / 100;
         let offsetx2 = this._monitor2.width * this._settings.get_int("offset") / 100;
         let offsety = this._monitor1.height * this._settings.get_int("offset") / 100;
@@ -170,14 +176,17 @@ const EdgeFlipping = new Lang.Class({
         this._initialDelayTimeoutId = Mainloop.timeout_add(this._settings.get_int("delay-timeout"), Lang.bind(this, function () {
             var ws;
             let activews = global.screen.get_active_workspace();
+            let [screen, pointerX, pointerY] = this._pointer.get_position();
             switch (actor.name) {
                 case "top-edge1":
                 case "top-edge2":
                     ws = activews.get_neighbor(Meta.MotionDirection.UP);
+                    this._pointer.warp(screen, pointerX, 1198);
                     break;
                 case "bottom-edge1":
                 case "bottom-edge2":
                     ws = activews.get_neighbor(Meta.MotionDirection.DOWN);
+                    this._pointer.warp(screen, pointerX, 1);
                     break;
                 case "right-edge":
                     ws = activews.get_neighbor(Meta.MotionDirection.RIGHT);
