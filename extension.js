@@ -181,12 +181,16 @@ const EdgeFlipping = new Lang.Class({
                 case "top-edge1":
                 case "top-edge2":
                     ws = activews.get_neighbor(Meta.MotionDirection.UP);
-                    this._pointer.warp(screen, pointerX, 1198);
+                    if (ws != null && ws != activews) {
+                        this._pointer.warp(screen, pointerX, 1198);
+                    }
                     break;
                 case "bottom-edge1":
                 case "bottom-edge2":
                     ws = activews.get_neighbor(Meta.MotionDirection.DOWN);
-                    this._pointer.warp(screen, pointerX, 1);
+                    if (ws != null && ws != activews) {
+                        this._pointer.warp(screen, pointerX, 1);
+                    }
                     break;
                 case "right-edge":
                     ws = activews.get_neighbor(Meta.MotionDirection.RIGHT);
